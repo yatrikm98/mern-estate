@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser'
 import listingRouter from './routes/listing.route.js'
 import path from 'path'
 
+import { fileURLToPath } from 'url';
 
 
 dotenv.config()
@@ -18,7 +19,8 @@ mongoose.connect(process.env.MONGO).then(() => {
 
 const app = express()
 
-const _dirname = path.resolve()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(express.json())
 app.use(cookieParser())
@@ -29,11 +31,12 @@ app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
 app.use('/api/listing', listingRouter)
 
-app.use(express.static(path.join(_dirname, '/client/dist')))
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(_dirname, 'client/dist', 'index.html'));
-});
+app.use(
+    express.static(
+        path.join(__dirname, '/client/dist')
+    )
+)
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500
@@ -44,6 +47,10 @@ app.use((err, req, res, next) => {
         message,
         statusCode
     })
+})
+
+app.get(/^.*$/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 })
 
 app.listen(3000, () => {

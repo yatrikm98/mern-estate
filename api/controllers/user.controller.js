@@ -1,4 +1,4 @@
-import { errorHanlder } from "../utils/error.js"
+import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
 import User from "../models/user.model.js"
 import Listing from "../models/listing.model.js"
@@ -10,7 +10,7 @@ export const test = (req, res) => {
 }
 
 export const updateUser = async (req, res, next) => {
-    if (req.user.id !== req.params.id) return next(errorHanlder(401, 'You can only update your own account'))
+    if (req.user.id !== req.params.id) return next(errorHandler(401, 'You can only update your own account'))
     try {
         if (req.body.password) {
             req.body.password = bcryptjs.hashSync(req.body.password, 10)
@@ -33,7 +33,7 @@ export const updateUser = async (req, res, next) => {
 }
 
 export const deletetUser = async (req, res, next) => {
-    if (req.user.id !== req.params.id) return next(errorHanlder(401, 'You can only Delete your own account'))
+    if (req.user.id !== req.params.id) return next(errorHandler(401, 'You can only Delete your own account'))
     try {
         await User.findByIdAndDelete(req.params.id)
         res.clearCookie('access_token')
@@ -45,12 +45,15 @@ export const deletetUser = async (req, res, next) => {
 
 export const getUserListings = async (req, res, next) => {
 
-    if (req.user.id !== req.params.id) return next(errorHanlder(401, 'You can only view your own listings'))
+    if (req.user.id !== req.params.id) return next(errorHandler(401, 'You can only view your own listings'))
     try {
+        console.log('Inside try statement of All Listings of a particular user')
         const listings = await Listing.find({ userRef: req.params.id })
+        console.log(listings, 'All Listings of a particular user')
         res.status(200).json(listings)
 
     } catch (error) {
+        console.log(error, 'User lIstings')
         next(error)
     }
 }
@@ -60,12 +63,11 @@ export const getUser = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.id)
         if (!user) {
-            return next(errorHanlder(404, 'User Not Found'))
+            return next(errorHandler(404, 'User Not Found'))
         }
         const { password: pass, ...rest } = user._doc;
         res.status(200).json(rest)
     } catch (error) {
         next(error)
     }
-
 }

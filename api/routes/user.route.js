@@ -1,7 +1,7 @@
 import express from 'express'
-import { test,updateUser,getUserListings,getUser } from '../controllers/user.controller.js';
+import { test,updateUser,getUserListings,getUser ,deletetUser } from '../controllers/user.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
-import { deletetUser } from '../controllers/user.controller.js';
+
 const router = express.Router()
 
 router.get('/test',test)
