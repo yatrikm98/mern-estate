@@ -128,6 +128,7 @@ const Profile = () => {
             setShowListingsError(false)
             setUserListings(data)
         } catch (error) {
+            console.log(error,'Error in Profile')
             setShowListingsError(true)
         }
     }
