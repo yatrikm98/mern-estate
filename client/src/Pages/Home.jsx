@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules'
-import 'swiper/css/bundle'
 import ListingItem from '../components/ListingItem';
 
 
@@ -69,18 +66,6 @@ const Home = () => {
                     Let's get started...
                 </Link>
             </div>
-
-            <Swiper modules={[Navigation]}
-                navigation>
-                {offerListings && offerListings.length > 0 &&
-                    offerListings.map((listing, index) => {
-                        return <SwiperSlide key={index}>
-                            <div className="h-[550px] w-full"
-                                style={{ background: `url(${listing.imageUrls[0]}) center no-repeat`, backgroundSize: 'cover' }}></div>
-                        </SwiperSlide>
-                    })
-                }
-            </Swiper>
 
             <div className='max-w-6xl mx-auto p-3 flex flex-col gap-8 my-10'>
                 {offerListings && offerListings.length > 0 && (

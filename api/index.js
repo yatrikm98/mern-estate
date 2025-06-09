@@ -6,7 +6,6 @@ import authRouter from './routes/auth.route.js'
 import cookieParser from 'cookie-parser'
 import listingRouter from './routes/listing.route.js'
 import path from 'path'
-
 import { fileURLToPath } from 'url';
 
 
@@ -24,7 +23,6 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.json())
 app.use(cookieParser())
-
 
 
 app.use('/api/user', userRouter)
