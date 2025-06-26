@@ -11,18 +11,30 @@ import { fileURLToPath } from 'url';
 
 dotenv.config()
 
-
-mongoose.connect(process.env.MONGO).then(() => {
-    console.log('Connected to mongodb')
-}).catch((err) => console.log('Error', err))
-
 const app = express()
+app.use(express.json())
+app.use(cookieParser())
+
+const connectMongoose = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO)
+        console.log('Connected to mongodb')
+        app.listen(3000, () => {
+            console.log('server is running on 3000')
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+connectMongoose()
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-app.use(express.json())
-app.use(cookieParser())
+
 
 
 app.use('/api/user', userRouter)
@@ -48,9 +60,6 @@ app.use((err, req, res, next) => {
 })
 
 app.get(/^.*$/, (req, res) => {
-    res.sendFile(path.join(__dirname, '..','client', 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'client', 'dist', 'index.html'));
 })
 
-app.listen(3000, () => {
-    console.log('server is running on 3000')
-})
